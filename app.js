@@ -1,7 +1,7 @@
 var http = require('http'), sys = require("sys"), fs = require('fs'), util=require('util');
 var port = process.env.PORT || 1337;
 console.log('listen:'+ port);
-var express = require('express'), app=express.createServer(), io = require('socket.io')listen(port);
+var express = require('express'), app=express.createServer(), io = require('socket.io').listen(app);
 io.configure(function () { 
   io.set("transports", ["xhr-polling"]); 
   io.set("polling duration", 10); 
