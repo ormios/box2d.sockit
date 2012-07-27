@@ -17,9 +17,10 @@ var io= sio.listen(app)
 io.configure(function () { 
   io.set("transports", ["xhr-polling"]); 
   io.set("polling duration", 10); 
+  io.set("close timeout", 30);
 });
 
-io.set('log level', 1); // reduce logging
+//io.set('log level', 1); // reduce logging
 
 var Box2D = require('./lib/box2d.js');
 
@@ -138,8 +139,13 @@ function createJoint(bodyA, bodyB, x, y) {
 function deleteJoint(cid) {
 	console.log(cid);
 	if(joints[cid]) {
-		world.DestroyJoint(joints[cid]);
-		delete joints[cid];
+		if(world.IsLocked()) {
+		  //should probably queue this and do it in update loop
+		  setTimeout(function() { deleteJoint(cid, true)}, 25);
+		} else {
+			world.DestroyJoint(joints[cid]);
+   		    delete joints[cid];
+		}
 	}
 }
 
@@ -207,26 +213,34 @@ setInterval(update, 1000 / 60);
 
 io.sockets.on('connection', function(client) {
 	clients.push(client);
+	var cid=clients.length;
 	console.log("Total clients: " + clients.length);
 	
 	client.emit("start", {cid: clients.length, count: bodiesNum});
 	step(true);
 	
-	client.on('create', function(data){
+	client.on('restorecid', function(data){
+		cid = data.cid;
+	});
+	client.on('createjoint', function(data){
 		createMouseJoint(data.cid, data.id, data.x, data.y);	
 	});
 
-	client.on('destroy', function(data){
+	client.on('destroyjoint', function(data){
 		deleteJoint(data.cid);
-		console.log('destroyed');		
+		console.log('destroyed_joint');		
 	});
 
-	client.on('update', function(data){
+	client.on('updatejoint', function(data){
 		updateJoint(data.cid, data.x, data.y);
 		console.log('update');		
 	});
 
 	client.on('disconnect', function(client){
+		clients.pop(client);
+		console.log("disconnect");		
+	}); 
+	client.on('close', function(client){
 		clients.pop(client);
 		console.log("disconnect");		
 	}); 

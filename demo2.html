@@ -47,7 +47,7 @@ function init() {
 			selectedBody = this;
 			handleMouseMove(ev);
 			var data = {x: mouseX/30, y: mouseY/30, id: this.id, cid: id};
-			socket.emit('create', data);
+			socket.emit('createjoint', data);
 		}
 		document.addEventListener("mousemove", handleMouseMove, true);
 	});
@@ -60,7 +60,7 @@ function init() {
 		if (selectedBody) {
 			selectedBody = null;
 			var data = {cid: id};
-			socket.emit('destroy', data);
+			socket.emit('destroyjoint', data);
 		}
 	});
 	
@@ -72,7 +72,7 @@ function init() {
 			if((newX != mouseX) &&(newY!=mouseY)) {
 				//console.log('new');
 				var data = {x: newX/30, y: newY/30, cid: id};
-				socket.emit('update', data);
+				socket.emit('updatejoint', data);
 			}
 		}
 		mouseX = newX;
