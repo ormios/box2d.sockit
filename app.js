@@ -1,6 +1,6 @@
 var http = require('http'), sys = require("sys"), fs = require('fs'), util=require('util');
 var port = process.env.PORT || 1337;
-console.log(port);
+console.log('listen:'+ port);
 var io = require('socket.io').listen(port);
 io.configure(function () { 
   io.set("transports", ["xhr-polling"]); 
