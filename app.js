@@ -1,6 +1,8 @@
 var http = require('http'), util=require('util');
-var port = process.env.PORT || 1337;
+var port = process.env.PORT || 5000;
 console.log('listen:'+ port);
+
+//setup server and hook socket.io to express
 var express = require('express'), app=express.createServer(), sio = require('socket.io');
 var app = express.createServer(express.logger());
 
@@ -8,7 +10,6 @@ app.get('/', function(request, response) {
   response.send('Hello World! ' + port);
 });
 
-var port = process.env.PORT || 5000;
 app.listen(port, function() {
   console.log("Listening on " + port);
 });
@@ -19,21 +20,15 @@ io.configure(function () {
 });
 
 io.set('log level', 1); // reduce logging
+
 var Box2D = require('./lib/box2d.js');
-
-//eval(fs.readFileSync('common.js') + '');
-
 
 /*
  ************************************************************************************************************************
  */
 
- var bodiesNum = 30;
+var bodiesNum = 30;
 var world;
-
-var xport = 2003;
-
-var syncTime = 1000 / 1;
 
 var	b2Vec2 = Box2D.Common.Math.b2Vec2,
 	b2AABB = Box2D.Collision.b2AABB,
@@ -153,7 +148,6 @@ function updateJoint(cid, x, y) {
 		joints[cid].SetTarget(new b2Vec2(x, y));
 }
 
- 
  /*
  ************************************************************************************************************************
  */
@@ -172,7 +166,7 @@ var clients = [];
 		var PI2 = Math.PI * 2;
 		
 function update() {
-	world.Step(1 / 60, 10, 10);
+	world.Step(1 / 60, 8, 3);
 	world.ClearForces();
 	step(false);
 }
@@ -207,9 +201,9 @@ function stepToClients(data) {
 
 setupWorld();
 setInterval(update, 1000 / 60);
+ 
 
 // SOCKETS
-
 
 io.sockets.on('connection', function(client) {
 	clients.push(client);
