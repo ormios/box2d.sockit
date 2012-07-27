@@ -1,0 +1,148 @@
+<!doctype>
+<html>
+
+<head><title>Box2dWeb Demo</title>
+<style type="text/css">
+.body {
+	background-color: red;
+	position: absolute;
+	border:1px solid white;
+	width: 28px;
+	height: 28px;
+}
+#canvas {
+	width:600;
+	height:400;
+	border:1px solid green;
+	background-color:#333333;
+}
+</style>
+</head>
+
+<body onload="">
+	<div id="canvas" width="600" height="400" >
+	</div>
+</body>
+<script src="lib/socket.io.js"></script>
+<script src="lib/jquery-1.7.2.min.js"></script>
+
+<script>
+$( function() {
+	init();
+});
+var id = null;
+
+function init() {
+//	window.setInterval(update, 1000 / 60);
+
+	// mouse
+	var mouseX, mouseY, mousePVec, selectedBody, mouseJoint = false;
+	var canvasPosition = getElementPosition(document.getElementById("canvas"));
+    var isMouseDown = false;
+	$('#canvas').on('mousedown','.body', this, function(ev) {
+		ev.preventDefault();
+		console.log('down');
+		isMouseDown=true;
+		if (!selectedBody) {
+			selectedBody = this;
+			handleMouseMove(ev);
+			var data = {x: mouseX/30, y: mouseY/30, id: this.id, cid: id};
+			socket.emit('create', data);
+		}
+		document.addEventListener("mousemove", handleMouseMove, true);
+	});
+	
+	document.addEventListener("mouseup", function() {
+		event.preventDefault();
+		console.log('up');
+		isMouseDown=false;
+		document.removeEventListener("mousemove", handleMouseMove, true);
+		if (selectedBody) {
+			selectedBody = null;
+			var data = {cid: id};
+			socket.emit('destroy', data);
+		}
+	});
+	
+	function handleMouseMove(event) {		
+		event.preventDefault();
+		var newX = event.clientX;
+		var newY = event.clientY;
+		if (isMouseDown && selectedBody) {
+			if((newX != mouseX) &&(newY!=mouseY)) {
+				//console.log('new');
+				var data = {x: newX/30, y: newY/30, cid: id};
+				socket.emit('update', data);
+			}
+		}
+		mouseX = newX;
+		mouseY = newY; 
+	};	
+	
+	//update
+	function update() {
+	}
+}
+         
+//helpers
+         
+//http://js-tut.aardon.de/js-tut/tutorial/position.html
+function getElementPosition(element) {
+	var elem = element, tagname = "", x = 0, y = 0;
+           
+	while((typeof(elem) == "object") && (typeof(elem.tagName) != "undefined")) {
+		y += elem.offsetTop;
+		x += elem.offsetLeft;
+
+		tagname = elem.tagName.toUpperCase();
+
+		if(tagname == "BODY") elem = 0;
+
+		if(typeof(elem) == "object") {
+			if(typeof(elem.offsetParent) == "object") elem = elem.offsetParent;
+		}
+
+		return {x: x, y: y};
+	}
+}
+</script>
+</html>
+
+
+<script>
+var count=0; 
+var socket = io.connect('http://Jonas-PC:1337');
+
+socket.on('connect',function() {
+	console.log('Client has connected to the server!');
+	connected = true;
+});
+
+socket.on('start', function(data) {
+	var c = $("#canvas");
+	id = data.cid;
+	count = data.count;
+	for(var i=0;i<count;i++) {
+		c.append('<div id="'+i+'" class="body"></div>');
+	}
+	console.log(c.html());
+});
+socket.on('step', function(data) {
+//console.log(data);
+	for(var i=0; i<count; i++) {
+		if(data[i]) {
+			var css = {'-webkit-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)', '-moz-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)', '-ms-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)'  , '-o-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)', 'transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)'};
+			var cb = $("#"+data[i].id);
+			if(!cb) {
+			
+			} else			
+			cb.css(css);
+		}
+	}
+});
+
+socket.on('disconnect',function() {
+	console.log('The client has disconnected!');
+	connected = false;
+});
+</script>
