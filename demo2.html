@@ -42,13 +42,13 @@ function init() {
 	$('#canvas').on('mousedown','.body', this, function(ev) {
 		ev.preventDefault();
 		console.log('down');
-		isMouseDown=true;
 		if (!selectedBody) {
 			selectedBody = this;
 			handleMouseMove(ev);
 			var data = {x: mouseX/30, y: mouseY/30, id: this.id, cid: id};
 			socket.emit('createjoint', data);
 		}
+		isMouseDown=true;
 		document.addEventListener("mousemove", handleMouseMove, true);
 	});
 	
@@ -111,32 +111,41 @@ function getElementPosition(element) {
 
 <script>
 var count=0; 
-var socket = io.connect('http://blooming-reef-7500.herokuapp.com');
+var socket = io.connect('http://localhost:5000', {
+  'reconnect': true,
+  'reconnection delay': 30,
+  'max reconnection attempts': 10
+});
 
-socket.on('connect',function() {
+socket.on('connect', function() {
 	console.log('Client has connected to the server!');
 	connected = true;
 });
 
 socket.on('start', function(data) {
 	var c = $("#canvas");
-	id = data.cid;
-	count = data.count;
-	for(var i=0;i<count;i++) {
-		c.append('<div id="'+i+'" class="body"></div>');
-	}
+	if(id){
+		socket.emit('restorecid', {cid: id});
+	} else {
+		id = data.cid;
+		count = data.count;
+		for(var i=0;i<count;i++) {
+			c.append('<div id="'+i+'" class="body"></div>');
+		}
+    }
 	console.log(c.html());
 });
+		
 socket.on('step', function(data) {
-//console.log(data);
+	console.log('step');
 	for(var i=0; i<count; i++) {
 		if(data[i]) {
 			var css = {'-webkit-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)', '-moz-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)', '-ms-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)'  , '-o-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)', 'transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)'};
 			var cb = $("#"+data[i].id);
 			if(!cb) {
-				// add the missing div perhaps...
+			
 			} else			
-				cb.css(css);
+			cb.css(css);
 		}
 	}
 });
@@ -144,5 +153,6 @@ socket.on('step', function(data) {
 socket.on('disconnect',function() {
 	console.log('The client has disconnected!');
 	connected = false;
+ socket = io.connect('http://Jonas-PC:1337');
 });
 </script>

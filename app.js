@@ -20,7 +20,7 @@ io.configure(function () {
   io.set("close timeout", 30);
 });
 
-//io.set('log level', 1); // reduce logging
+io.set('log level', 2); // reduce logging
 
 var Box2D = require('./lib/box2d.js');
 
@@ -200,9 +200,7 @@ function step( IsSleeping) {
 }
 
 function stepToClients(data) {
-	for (var i = 0; i < clients.length; i++) {
-		clients[i].emit("step", data);
-	}
+io.sockets.emit('step',data);
 }
 
 setupWorld();
@@ -220,20 +218,22 @@ io.sockets.on('connection', function(client) {
 	step(true);
 	
 	client.on('restorecid', function(data){
+		clients.pop(cid); //remove new session
 		cid = data.cid;
 	});
 	client.on('createjoint', function(data){
 		createMouseJoint(data.cid, data.id, data.x, data.y);	
+		console.log('create_joint'+cid+' '+data.cid);		
 	});
 
 	client.on('destroyjoint', function(data){
 		deleteJoint(data.cid);
-		console.log('destroyed_joint');		
+		console.log('destroyed_joint'+cid+' '+data.cid);		
 	});
 
 	client.on('updatejoint', function(data){
 		updateJoint(data.cid, data.x, data.y);
-		console.log('update');		
+		console.log('update_joint'+cid+' '+data.cid);		
 	});
 
 	client.on('disconnect', function(client){
