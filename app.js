@@ -1,7 +1,18 @@
 var http = require('http'), sys = require("sys"), fs = require('fs'), util=require('util');
 var port = process.env.PORT || 1337;
 console.log('listen:'+ port);
-var express = require('express'), app=express.createServer(), io = require('socket.io').listen(port);
+var express = require('express'), app=express.createServer(), sio = require('socket.io');
+var app = express.createServer(express.logger());
+
+app.get('/', function(request, response) {
+  response.send('Hello World! ' + port);
+});
+
+var port = process.env.PORT || 5000;
+app.listen(port, function() {
+  console.log("Listening on " + port);
+});
+var io= sio.listen(app)
 io.configure(function () { 
   io.set("transports", ["xhr-polling"]); 
   io.set("polling duration", 10); 
