@@ -1,5 +1,12 @@
 var http = require('http'), sys = require("sys"), fs = require('fs'), util=require('util');
-var io = require('socket.io').listen(1337);
+var port = process.env.PORT || 1337;
+console.log(port);
+var io = require('socket.io').listen(port);
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
+
 io.set('log level', 1); // reduce logging
 var Box2D = require('./lib/box2d.js');
 
