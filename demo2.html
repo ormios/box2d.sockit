@@ -111,11 +111,9 @@ function getElementPosition(element) {
 
 <script>
 var count=0; 
-var socket = io.connect('http://localhost:5000', {
-  'reconnect': true,
-  'reconnection delay': 30,
-  'max reconnection attempts': 10
-});
+//
+//var socket = io.connect('http://localhost:5000'
+var socket = io.connect('http://blooming-reef-7500.herokuapp.com');
 
 socket.on('connect', function() {
 	console.log('Client has connected to the server!');

@@ -116,6 +116,9 @@ function findBody(index) {
 }
 
 function createMouseJoint(cid, id, x, y) {
+	if(joints[cid]) {
+		deleteJoint(cid);
+	}
 	var j = createJoint(world.GetGroundBody(), findBody(id), x, y);
 	if(j)
 		joints[cid] = j; //createMouseJoint(data);		
@@ -141,11 +144,14 @@ function deleteJoint(cid) {
 	if(joints[cid]) {
 		if(world.IsLocked()) {
 		  //should probably queue this and do it in update loop
-		  setTimeout(function() { deleteJoint(cid, true)}, 25);
+		  console.log('deleteJoint - world is locked.' +cid);   
+		  if(cid>0)
+			joints[-cid]=joints[cid];
+		  setTimeout(function() { deleteJoint(-Math.abs(cid), true)}, 25);
 		} else {
 			world.DestroyJoint(joints[cid]);
-   		    delete joints[cid];
 		}
+		delete joints[cid];
 	}
 }
 
@@ -158,7 +164,6 @@ function updateJoint(cid, x, y) {
  ************************************************************************************************************************
  */
  
-var clients = [];
 		// The scale between Box2D units and pixels
 		var SCALE = 30;
 
@@ -208,17 +213,16 @@ setInterval(update, 1000 / 60);
  
 
 // SOCKETS
-
+var cidseed=1;
 io.sockets.on('connection', function(client) {
-	clients.push(client);
-	var cid=clients.length;
-	console.log("Total clients: " + clients.length);
 	
-	client.emit("start", {cid: clients.length, count: bodiesNum});
+	var cid=cidseed++;
+	console.log("Total clients: " + cidseed);
+	
+	client.emit("start", {cid: cid, count: bodiesNum});
 	step(true);
 	
 	client.on('restorecid', function(data){
-		clients.pop(cid); //remove new session
 		cid = data.cid;
 	});
 	client.on('createjoint', function(data){
@@ -237,11 +241,11 @@ io.sockets.on('connection', function(client) {
 	});
 
 	client.on('disconnect', function(client){
-		clients.pop(client);
+		deleteJoint(cid);
+		deleteJoint(-cid);
 		console.log("disconnect");		
 	}); 
 	client.on('close', function(client){
-		clients.pop(client);
 		console.log("disconnect");		
 	}); 
 });
