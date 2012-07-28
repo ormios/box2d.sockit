@@ -17,7 +17,6 @@ var io= sio.listen(app)
 io.configure(function () { 
   io.set("transports", ["xhr-polling"]); 
   io.set("polling duration", 10); 
-  io.set("close timeout", 30);
 });
 
 io.set('log level', 2); // reduce logging
