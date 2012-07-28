@@ -8,7 +8,6 @@ It's my first take on git and node.js so be nice. I still don't get how to commi
 hosted the app part @ http://www.heroku.com/ so thats what the package.json and Procfile is fore.
 
 *******************************************************
-
 How to use:
 this mockup requires node.js, socket.io and express.
 install node.js
@@ -16,6 +15,7 @@ fix your path if you are in window
 npm install express
 npm install socket.io
 Run "node app.js" from bash or cmd and then open one or more windows with "demo2.html".
+*******************************************************
 
 (in windows you can not just open demo2.html from disk, it has to be hosted) 
 in windows if you don't know how to do this follow (for vista, win7+): {
@@ -40,10 +40,10 @@ start the app.js as above.
 click the flag down left on your desktop. the "start" button.
 type http://localhost/demo2.html in the search box and hit enter
 }
-
+*******************************************************
 
 if you try to deploy the app.js on heroku and are using windows.
-check your %Path%, check the heroukuRubyPath and check herouku.bat in "program files"/heroku
+check your %Path% after installing toolbelt, check the heroukuRubyPath and check herouku.bat in "program files"/heroku
 my ruby installed was 1.9.2, in .bat file it was 1.9.3 and the path env var was missing...
 also think about installing python to get the blazing compiled yada locals...
 I'd say the performance gained is round about 0% and as a comparison for when you deploy to a cloud service then performance, yes network latency, hit's you like a ton of puberty.
