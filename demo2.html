@@ -112,8 +112,8 @@ function getElementPosition(element) {
 <script>
 var count=0; 
 var timeskew_ = +new Date;
-var socket = io.connect('http://localhost:5000');
-//var socket = io.connect('http://blooming-reef-7500.herokuapp.com');
+//var socket = io.connect('http://localhost:5000');
+var socket = io.connect('http://blooming-reef-7500.herokuapp.com');
 setInterval(function() {
 	var timeskew = +new Date;
 	if(timeskew-timeskew_>600) {
