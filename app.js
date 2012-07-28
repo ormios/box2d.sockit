@@ -247,7 +247,7 @@ io.sockets.on('connection', function(client) {
 			joints[data.cid].t = +new Date;
 	});
 	client.on('createjoint', function(data){
-		createMouseJoint(data.cid, data.t, data.id, data.x, data.y);	
+		createMouseJoint(data.cid, +new Date, data.id, data.x, data.y);	
 		console.log('create_joint'+cid+' '+data.cid);		
 	});
 
@@ -257,7 +257,7 @@ io.sockets.on('connection', function(client) {
 	});
 
 	client.on('updatejoint', function(data){
-		updateJoint(data.cid, data.t, data.x, data.y);
+		updateJoint(data.cid, +new Date, data.x, data.y);
 		console.log('update_joint'+cid+' '+data.cid);		
 	});
 

@@ -111,10 +111,16 @@ function getElementPosition(element) {
 
 <script>
 var count=0; 
-//
-//var socket = io.connect('http://localhost:5000'
-var socket = io.connect('http://blooming-reef-7500.herokuapp.com');
-
+var timeskew_ = +new Date;
+var socket = io.connect('http://localhost:5000');
+//var socket = io.connect('http://blooming-reef-7500.herokuapp.com');
+setInterval(function() {
+	var timeskew = +new Date;
+	if(timeskew-timeskew_>600) {
+		socket.emit('ping', {cid: id, t: timeskew-timeskew_});
+		timeskew_=timeskew;
+	}
+},200);
 socket.on('connect', function() {
 	console.log('Client has connected to the server!');
 	connected = true;
