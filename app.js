@@ -92,16 +92,16 @@ function setupWorld() {
 
 var joints = {};
 
-function getJointData(j) {
-	var data = {};
+//function getJointData(j) {
+//	var data = {};
 
-	data.x = j.GetTarget().x;
-	data.y = j.GetTarget().y;
+//	data.x = j.GetTarget().x;
+//	data.y = j.GetTarget().y;
 
-	data.bodyId = j.GetBodyB().GetUserData().bodyId;
+//	data.bodyId = j.GetBodyB().GetUserData().bodyId;
 
-	return data;
-}
+//	return data;
+//}
 
 function findBody(index) {
 	var body = null;
@@ -115,13 +115,14 @@ function findBody(index) {
 	return body;
 }
 
-function createMouseJoint(cid, id, x, y) {
+function createMouseJoint(cid, t, id, x, y) {
 	if(joints[cid]) {
 		deleteJoint(cid);
 	}
 	var j = createJoint(world.GetGroundBody(), findBody(id), x, y);
-	if(j)
-		joints[cid] = j; //createMouseJoint(data);		
+	if(j) {
+		joints[cid] = {j:j,t:t}; //createMouseJoint(data);		
+	}
 	return j;
 }
 
@@ -149,15 +150,19 @@ function deleteJoint(cid) {
 			joints[-cid]=joints[cid];
 		  setTimeout(function() { deleteJoint(-Math.abs(cid), true)}, 25);
 		} else {
-			world.DestroyJoint(joints[cid]);
+			world.DestroyJoint(joints[cid].j);
 		}
 		delete joints[cid];
 	}
 }
 
-function updateJoint(cid, x, y) {
-	if(joints.hasOwnProperty(cid)) 
-		joints[cid].SetTarget(new b2Vec2(x, y));
+function updateJoint(cid, t, x, y) {
+	if(joints.hasOwnProperty(cid)) {
+		joints[cid].t = t;
+		if(x && y) {
+			joints[cid].j.SetTarget(new b2Vec2(x, y));
+		}
+	}
 }
 
  /*
@@ -177,9 +182,22 @@ function updateJoint(cid, x, y) {
 		var PI2 = Math.PI * 2;
 		
 function update() {
+	checkJoints();
 	world.Step(1 / 60, 8, 3);
 	world.ClearForces();
-	step(false);
+	step(false);	
+}
+
+function checkJoints() {
+	var _now = +new Date;
+	for(var cid in joints) {
+		if(joints[cid]) {
+			if(joints[cid].t+1000 < _now) {
+				deleteJoint(cid);
+				deleteJoint(-cid);
+			}
+		}		
+	}
 }
 function step( IsSleeping) {
 	var data=[3], i=0; 
@@ -225,8 +243,12 @@ io.sockets.on('connection', function(client) {
 	client.on('restorecid', function(data){
 		cid = data.cid;
 	});
+	client.on('ping', function(data){
+		if(joints[data.cid])
+			joints[data.cid].t = +new Date;
+	});
 	client.on('createjoint', function(data){
-		createMouseJoint(data.cid, data.id, data.x, data.y);	
+		createMouseJoint(data.cid, data.t, data.id, data.x, data.y);	
 		console.log('create_joint'+cid+' '+data.cid);		
 	});
 
@@ -236,7 +258,7 @@ io.sockets.on('connection', function(client) {
 	});
 
 	client.on('updatejoint', function(data){
-		updateJoint(data.cid, data.x, data.y);
+		updateJoint(data.cid, data.t, data.x, data.y);
 		console.log('update_joint'+cid+' '+data.cid);		
 	});
 
