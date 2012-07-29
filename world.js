@@ -150,13 +150,15 @@
         }
     }
     World.prototype.start = function () {
+        var every_other=0;
         var ctx = this;
         this.timer = setInterval(function () {
             ctx.checkJoints_();
-            ctx.world.Step(1 / 20, 8, 8);
+            ctx.world.Step(1 / 60, 8, 8);
             ctx.world.ClearForces();
-            ctx.doStep_();
-        }, 1000 / 20);
+            if(every_other++%2==1) // should send 20fps but calculate 60fps...maybe
+                ctx.doStep_();
+        }, 1000 / 60);
     }
     World.prototype.stop = function () {
         clearInterval(this.timer);

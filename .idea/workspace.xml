@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d78bfb7b-b49c-4009-99bd-39378888c82d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/images/ball.jpg" afterPath="$PROJECT_DIR$/public/images/ball.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/images/box.jpg" afterPath="$PROJECT_DIR$/public/images/box.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/demo2.html" afterPath="$PROJECT_DIR$/public/demo2.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/world.js" afterPath="$PROJECT_DIR$/world.js" />
     </list>
     <ignored path="box2d.node.sock.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,7 +37,7 @@
       <file leaf-file-name="demo2.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/demo2.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="135" column="29" selection-start="4232" selection-end="4232" vertical-scroll-proportion="0.018621974">
+            <state line="45" column="0" selection-start="1471" selection-end="1471" vertical-scroll-proportion="0.58845437">
               <folding />
             </state>
           </provider>
@@ -48,7 +46,7 @@
       <file leaf-file-name="world.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/world.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="157" column="26" selection-start="5261" selection-end="5261" vertical-scroll-proportion="0.0">
+            <state line="156" column="32" selection-start="5215" selection-end="5215" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -358,14 +356,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/world.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="157" column="26" selection-start="5261" selection-end="5261" vertical-scroll-proportion="0.0">
+        <state line="156" column="32" selection-start="5215" selection-end="5215" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/demo2.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="135" column="29" selection-start="4232" selection-end="4232" vertical-scroll-proportion="0.018621974">
+        <state line="45" column="0" selection-start="1471" selection-end="1471" vertical-scroll-proportion="0.58845437">
           <folding />
         </state>
       </provider>
