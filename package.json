@@ -6,7 +6,7 @@
 	"socket.io": "0.9.8"
   },
   "scripts": {
-    "start": "node Box2D.node.sock/app"
+    "start": "node app"
   },
   "engines": {
     "node": "0.8.x",
