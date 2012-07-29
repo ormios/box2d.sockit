@@ -25,15 +25,13 @@ app.get('/', function (request, response) {
 });
 
 app.configure(function () {
-//    server.use('/css', express.static(__dirname + '/css'));
-//    server.use(express.static(__dirname + '/html'));
     app.set('port', process.env.PORT || 3000);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
-    // server.use(express.favicon());
-//    server.use(express.logger('dev'));
-//    server.use(express.bodyParser());
-//    server.use(express.methodOverride());
+    app.use(express.favicon());
+    app.use(express.logger('dev'));
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 });
@@ -47,7 +45,6 @@ io.configure(function () {
     io.set("transports", ["xhr-polling"]);
     io.set("polling duration", 10);
 });
-
 
 world.on('step', function (data) {
     io.sockets.emit('step', data);

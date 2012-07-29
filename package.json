@@ -2,11 +2,12 @@
   "name": "box2d.node.sock",
   "version": "0.0.1",
   "dependencies": {
+    "jade": "*",
     "express": "2.5.x",
 	"socket.io": "0.9.8"
   },
   "scripts": {
-    "start": "node app"
+    "start": "node app.js"
   },
   "engines": {
     "node": "0.8.x",

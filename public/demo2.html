@@ -131,7 +131,9 @@ function getElementPosition(element) {
 <script>
 var count=0; 
 var timeskew_ = +new Date;
-var socket = io.connect(window.document.location.protocol + '://'+window.document.location.host+':'+window.document.location.port);
+var socket_io_url = window.document.location.protocol + '://'+window.document.location.host;
+var socket = io.connect(socket_io_url);
+console.log(socket_io_url);
 //'http://localhost:1337');
 //var socket = io.connect('http://blooming-reef-7500.herokuapp.com');
 setInterval(function() {
@@ -153,15 +155,6 @@ socket.on('start', function(data) {
 		id = data.cid;
 	}
 		count = data.count;
-/*		for(var i=0;i<count;i++) {
-		if(data[i].s == 0)
-			c.append('<div id="'+i+'" class="body"></div>');
-		else
-			c.append('<div id="'+i+'" class="body circle"></div>');
-		}
-    }
-	console.log(c.html());
-*/
 });
 var $canvas = $("#canvas");
 var cbs=[];		
