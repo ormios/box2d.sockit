@@ -26,9 +26,6 @@ app.get('/', function (request, response) {
 
 //app.createServer();
 //var server = http.createServer(app);
-app.listen(process.env.PORT || 3000, function () {
-    console.log("Express server listening on port " + app.get('port'));
-});
 app.configure(function () {
     app.set('port', process.env.PORT || 3000);
     app.set('views', __dirname + '/views');
@@ -40,7 +37,10 @@ app.configure(function () {
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 });
-var io = sio.listen(app)
+var server = app.listen(process.env.PORT || 3000, function () {
+    console.log("Express server listening on port " + app.get('port'));
+});
+var io = sio.listen(server)
 io.configure(function () {
     io.set("transports", ["xhr-polling"]);
     io.set("polling duration", 10);

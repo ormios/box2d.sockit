@@ -153,10 +153,10 @@
         var ctx = this;
         this.timer = setInterval(function () {
             ctx.checkJoints_();
-            ctx.world.Step(1 / 90, 8, 3);
+            ctx.world.Step(1 / 20, 8, 8);
             ctx.world.ClearForces();
             ctx.doStep_();
-        }, 1000 / 100);
+        }, 1000 / 20);
     }
     World.prototype.stop = function () {
         clearInterval(this.timer);
