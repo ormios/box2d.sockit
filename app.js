@@ -24,6 +24,11 @@ app.get('/', function (request, response) {
     response.send('Hello World! ');
 });
 
+//app.createServer();
+//var server = http.createServer(app);
+app.listen(process.env.PORT || 3000, function () {
+    console.log("Express server listening on port " + app.get('port'));
+});
 app.configure(function () {
     app.set('port', process.env.PORT || 3000);
     app.set('views', __dirname + '/views');
@@ -34,11 +39,6 @@ app.configure(function () {
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
-});
-//app.createServer();
-//var server = http.createServer(app);
-app.listen(app.get('port'), function () {
-    console.log("Express server listening on port " + app.get('port'));
 });
 var io = sio.listen(app)
 io.configure(function () {
