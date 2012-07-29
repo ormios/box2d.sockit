@@ -1,0 +1,80 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'express',
+1 verbose cli   '2.5.9' ]
+2 info using npm@1.1.45
+3 info using node@v0.8.4
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 verbose config file C:\Users\Jonas\.npmrc
+6 verbose config file C:\Program Files\nodejs\etc\npmrc
+7 verbose config file C:\Program Files\nodejs\node_modules\npm\npmrc
+8 verbose read json C:\Users\Jonas\Desktop\Box2D.node.sock\package.json
+9 verbose read json C:\Users\Jonas\Desktop\Box2D.node.sock\node_modules\express\package.json
+10 verbose read json C:\Users\Jonas\Desktop\Box2D.node.sock\node_modules\jade\package.json
+11 verbose read json C:\Users\Jonas\Desktop\Box2D.node.sock\node_modules\socket.io\package.json
+12 warn package.json jade@0.27.0 No README.md file found!
+13 verbose from cache C:\Users\Jonas\Desktop\Box2D.node.sock\package.json
+14 verbose readDependencies using package.json deps
+15 verbose cache add [ 'express@2.5.x', null ]
+16 silly cache add name=undefined spec="express@2.5.x" args=["express@2.5.x",null]
+17 verbose parsed url { pathname: 'express@2.5.x',
+17 verbose parsed url   path: 'express@2.5.x',
+17 verbose parsed url   href: 'express@2.5.x' }
+18 silly cache add name="express" spec="2.5.x" args=["express","2.5.x"]
+19 verbose parsed url { pathname: '2.5.x', path: '2.5.x', href: '2.5.x' }
+20 verbose addNamed [ 'express', '2.5.x' ]
+21 verbose addNamed [ null, '>=2.5.0- <2.6.0-' ]
+22 verbose cache add [ '2.5.9', null ]
+23 silly cache add name=undefined spec="2.5.9" args=["2.5.9",null]
+24 verbose parsed url { pathname: '2.5.9', path: '2.5.9', href: '2.5.9' }
+25 silly lockFile 38bf5a2e-express-2-5-x express@2.5.x
+26 verbose lock express@2.5.x C:\Users\Jonas\AppData\Roaming\npm-cache\38bf5a2e-express-2-5-x.lock
+27 silly lockFile a53d438c-2-5-9 2.5.9
+28 verbose lock 2.5.9 C:\Users\Jonas\AppData\Roaming\npm-cache\a53d438c-2-5-9.lock
+29 silly addNameRange { name: 'express', range: '>=2.5.0- <2.6.0-', hasData: false }
+30 silly lockFile a53d438c-2-5-9 2.5.9
+31 verbose url raw express
+32 verbose url resolving [ 'https://registry.npmjs.org/', './express' ]
+33 verbose url resolved https://registry.npmjs.org/express
+34 info retry registry request attempt 1 at 22:06:16
+35 verbose etag "30DUXYR3SD0N2E11BFHWUA7WQ"
+36 http GET https://registry.npmjs.org/express
+37 verbose addNamed [ '2.5.9', '' ]
+38 verbose addNamed [ null, '' ]
+39 silly lockFile fe2b2389-2-5-9 2.5.9@
+40 verbose lock 2.5.9@ C:\Users\Jonas\AppData\Roaming\npm-cache\fe2b2389-2-5-9.lock
+41 silly addNameRange { name: '2.5.9', range: '', hasData: false }
+42 verbose url raw 2.5.9
+43 verbose url resolving [ 'https://registry.npmjs.org/', './2.5.9' ]
+44 verbose url resolved https://registry.npmjs.org/2.5.9
+45 info retry registry request attempt 1 at 22:06:16
+46 http GET https://registry.npmjs.org/2.5.9
+47 http 304 https://registry.npmjs.org/express
+48 silly registry.get cb [ 304,
+48 silly registry.get   { server: 'CouchDB/1.2.0 (Erlang OTP/R15B)',
+48 silly registry.get     etag: '"30DUXYR3SD0N2E11BFHWUA7WQ"',
+48 silly registry.get     date: 'Sun, 29 Jul 2012 20:06:25 GMT',
+48 silly registry.get     'content-length': '0' } ]
+49 verbose etag express from cache
+50 http 404 https://registry.npmjs.org/2.5.9
+51 silly registry.get cb [ 404,
+51 silly registry.get   { server: 'CouchDB/1.2.0 (Erlang OTP/R15B)',
+51 silly registry.get     date: 'Sun, 29 Jul 2012 20:06:25 GMT',
+51 silly registry.get     'content-type': 'application/json',
+51 silly registry.get     'content-length': '52',
+51 silly registry.get     'cache-control': 'must-revalidate' } ]
+52 silly lockFile fe2b2389-2-5-9 2.5.9@
+53 error 404 '2.5.9' is not in the npm registry.
+53 error 404 You should bug the author to publish it
+53 error 404
+53 error 404 Note that you can also install from a
+53 error 404 tarball, folder, or http url, or git url.
+54 error System Windows_NT 6.1.7601
+55 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "express" "2.5.9"
+56 error cwd C:\Users\Jonas\Desktop\Box2D.node.sock
+57 error node -v v0.8.4
+58 error npm -v 1.1.45
+59 error code E404
+60 verbose exit [ 1, true ]

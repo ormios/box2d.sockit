@@ -10,7 +10,7 @@ var express = require('express')
     , worldjs = new require('./world.js');
 
 
-var app = express();
+var app = express.createServer();
 
 var World = worldjs.World;
 var world = new World();
@@ -36,11 +36,11 @@ app.configure(function () {
     app.use(express.static(path.join(__dirname, 'public')));
 });
 //app.createServer();
-var server = http.createServer(app);
-server.listen(app.get('port'), function () {
+//var server = http.createServer(app);
+app.listen(app.get('port'), function () {
     console.log("Express server listening on port " + app.get('port'));
 });
-var io = sio.listen(server)
+var io = sio.listen(app)
 io.configure(function () {
     io.set("transports", ["xhr-polling"]);
     io.set("polling duration", 10);
