@@ -24,21 +24,21 @@ app.get('/', function (request, response) {
     response.send('Hello World! ');
 });
 
-//app.createServer();
-var server = http.createServer(app);
-server.configure(function () {
+app.configure(function () {
 //    server.use('/css', express.static(__dirname + '/css'));
 //    server.use(express.static(__dirname + '/html'));
-    server.set('port', process.env.PORT || 3000);
-    server.set('views', __dirname + '/views');
-    server.set('view engine', 'jade');
-    server.use(express.favicon());
-    server.use(express.logger('dev'));
-    server.use(express.bodyParser());
-    server.use(express.methodOverride());
-    server.use(app.router);
-    server.use(express.static(path.join(__dirname, 'public')));
+    app.set('port', process.env.PORT || 3000);
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    // server.use(express.favicon());
+//    server.use(express.logger('dev'));
+//    server.use(express.bodyParser());
+//    server.use(express.methodOverride());
+    app.use(app.router);
+    app.use(express.static(path.join(__dirname, 'public')));
 });
+//app.createServer();
+var server = http.createServer(app);
 server.listen(app.get('port'), function () {
     console.log("Express server listening on port " + app.get('port'));
 });
