@@ -1,0 +1,192 @@
+<!doctype>
+<html>
+
+<head><title>Box2dWeb Demo</title>
+<style type="text/css">
+.body {
+	position: absolute;
+	border:1px solid white;
+	width: 28px;
+	height: 28px;
+	-o-background-size:100% 100%;             /*  Opera  */
+    -webkit-background-size:100% 100%;        /*  Safari  */
+    -khtml-background-size:100% 100%;         /*  Konqueror  */
+    -moz-background-size:100% 100%;           /*not working in Firefox as yet */
+    background-size:100% 100%;           
+    background-repeat:no-repeat;	
+}
+.box {
+	background-image: url(box.jpg);
+}
+	  .circle {
+	  	border: 1px solid black;
+		background-image: url(ball.jpg);
+       -webkit-border-radius: 50%; -moz-border-radius: 50%;
+      } 
+#canvas {
+	width:600;
+	height:400;
+	border:1px solid green;
+	background-color:#333333;
+		-webkit-transform: translateZ(0);
+				-o-transform: translateZ(0);
+				-moz-transform: translateZ(0);
+				-ms-transform: translateZ(0);
+				transform: translateZ(0);
+}
+</style>
+</head>
+
+<body onload="">
+	<div id="canvas" width="600" height="400" >
+	</div>
+</body>
+<script type="text/javascript" src="javascripts/socket.io.js"></script>
+<script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="javascripts/MouseAndTouch.js"></script>
+
+<script>
+$( function() {
+	init();
+});
+var id = null;
+
+function init() {
+//	window.setInterval(update, 1000 / 60);
+
+	// mouse
+	var mouseX, mouseY, mousePVec, selectedBody, mouseJoint = false;
+	var canvasPosition = getElementPosition(document.getElementById("canvas"));
+    var isMouseDown = false;
+	$('#canvas').on('mousedown','.body', this, function(ev) {
+		ev.preventDefault();
+		console.log('down');
+		if (!selectedBody) {
+			selectedBody = this;
+			handleMouseMove(ev);
+			var data = {x: mouseX/30, y: mouseY/30, id: this.id, cid: id};
+			socket.emit('createjoint', data);
+		}
+		isMouseDown=true;
+		document.addEventListener("mousemove", handleMouseMove, true);
+	});
+	
+	document.addEventListener("mouseup", function() {
+		event.preventDefault();
+		console.log('up');
+		isMouseDown=false;
+		document.removeEventListener("mousemove", handleMouseMove, true);
+		if (selectedBody) {
+			selectedBody = null;
+			var data = {cid: id};
+			socket.emit('destroyjoint', data);
+		}
+	});
+	
+	function handleMouseMove(event) {		
+		event.preventDefault();
+		var newX = event.clientX;
+		var newY = event.clientY;
+		if (isMouseDown && selectedBody) {
+			if((newX != mouseX) &&(newY!=mouseY)) {
+				//console.log('new');
+				var data = {x: newX/30, y: newY/30, cid: id};
+				socket.emit('updatejoint', data);
+			}
+		}
+		mouseX = newX;
+		mouseY = newY; 
+	};	
+	
+	//update
+	function update() {
+	}
+}
+         
+//helpers
+         
+//http://js-tut.aardon.de/js-tut/tutorial/position.html
+function getElementPosition(element) {
+	var elem = element, tagname = "", x = 0, y = 0;
+           
+	while((typeof(elem) == "object") && (typeof(elem.tagName) != "undefined")) {
+		y += elem.offsetTop;
+		x += elem.offsetLeft;
+
+		tagname = elem.tagName.toUpperCase();
+
+		if(tagname == "BODY") elem = 0;
+
+		if(typeof(elem) == "object") {
+			if(typeof(elem.offsetParent) == "object") elem = elem.offsetParent;
+		}
+
+		return {x: x, y: y};
+	}
+}
+</script>
+</html>
+
+
+<script>
+var count=0; 
+var timeskew_ = +new Date;
+var socket = io.connect(window.document.location.protocol + '://'+window.document.location.host+':'+window.document.location.port);
+//'http://localhost:1337');
+//var socket = io.connect('http://blooming-reef-7500.herokuapp.com');
+setInterval(function() {
+	var timeskew = +new Date;
+	if(timeskew-timeskew_>600) {
+		socket.emit('ping', {cid: id, t: timeskew-timeskew_});
+		timeskew_=timeskew;
+	}
+},200);
+socket.on('connect', function() {
+	console.log('Client has connected to the server!');
+	connected = true;
+});
+
+socket.on('start', function(data) {
+	if(id){
+		socket.emit('restorecid', {cid: id});
+	} else {
+		id = data.cid;
+	}
+		count = data.count;
+/*		for(var i=0;i<count;i++) {
+		if(data[i].s == 0)
+			c.append('<div id="'+i+'" class="body"></div>');
+		else
+			c.append('<div id="'+i+'" class="body circle"></div>');
+		}
+    }
+	console.log(c.html());
+*/
+});
+var $canvas = $("#canvas");
+var cbs=[];		
+socket.on('step', function(data) {
+	console.log('step');
+	
+	for(var i=0; i<data.length; i++) {
+		if(data[i]) {
+			var css = {'-webkit-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)', '-moz-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)', '-ms-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)'  , '-o-transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)', 'transform':'translate(' + data[i].x + 'px,' + data[i].y + 'px) rotate(' + data[i].r  + 'deg)'};
+			if(!cbs[data[i].id]) {
+				if(data[i].s == 0)
+					cb = '<div id="'+data[i].id+'" class="body box"></div>';
+				else
+					cb = '<div id="'+data[i].id+'" class="body circle"></div>';
+				cbs[data[i].id]=$(cb);	
+				cbs[data[i].id].appendTo($canvas);
+			}
+			cbs[data[i].id].css(css);
+		}
+	}
+});
+
+socket.on('disconnect',function() {
+	console.log('The client has disconnected!');
+	connected = false;
+ socket = io.connect('http://Jonas-PC:1337');
+});
+</script>
